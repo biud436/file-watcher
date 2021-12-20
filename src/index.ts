@@ -3,6 +3,7 @@ import * as path from "path";
 import { v4 } from "uuid";
 import { EventEmitter } from "events";
 import DebounceWathcer from "./debounce_watcher";
+import TaskJob from "./job";
 
 namespace EntryPoint {
     export class App extends EventEmitter {
@@ -20,7 +21,16 @@ namespace EntryPoint {
             this.on("ready", () => {
                 this._watcher.on("change", (filename: string) => {
                     console.clear();
-                    console.log(filename + "가 변경되었습니다");
+
+                    TaskJob.addTask(
+                        new Promise((resolve, reject) => {
+                            if (!filename) {
+                                reject("error " + filename);
+                            }
+                            console.log(filename + "가 변경되었습니다");
+                            resolve(filename);
+                        })
+                    );
                 });
                 this._watcher.addWatch(".");
             });
