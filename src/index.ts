@@ -4,6 +4,7 @@ import { v4 } from "uuid";
 import { EventEmitter } from "events";
 import DebounceWathcer from "./debounce_watcher";
 import TaskJob from "./job";
+import { Config } from "./config";
 
 namespace EntryPoint {
     export class App extends EventEmitter {
@@ -32,7 +33,16 @@ namespace EntryPoint {
                         })
                     );
                 });
-                this._watcher.addWatch(".");
+
+                const config = new Config();
+                const watchFolder = config.readWatchDir();
+
+                if (!fs.existsSync(watchFolder)) {
+                    throw new Error(
+                        watchFolder + "는 존재하지 않는 폴더입니다"
+                    );
+                }
+                this._watcher.addWatch(watchFolder);
             });
         }
 
