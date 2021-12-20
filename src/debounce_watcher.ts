@@ -69,6 +69,7 @@ namespace EntryPoint {
                 const wathcerObject = this.addDebounce(filename, lastTouch);
             });
 
+            // 초 분 시 일 월 요일
             cron.schedule("*/2 * * * * *", () => {
                 this.removeOldWatcher();
                 this.sortDebounce();
