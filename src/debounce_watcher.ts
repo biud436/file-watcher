@@ -10,6 +10,8 @@ namespace EntryPoint {
         touch: number;
     }
 
+    const TIME_INTERVAL = 2000;
+
     export class DebounceWatcher extends EventEmitter {
         private _touch: number;
         private _file: any;
@@ -50,7 +52,7 @@ namespace EntryPoint {
 
         private removeOldWatcher() {
             const now = Time.now();
-            const maxTime = now - 2000;
+            const maxTime = now - TIME_INTERVAL;
 
             this._watcher = this._watcher.filter((watcher: WatcherFileLink) => {
                 return watcher.touch > maxTime;
