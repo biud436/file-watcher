@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import * as cron from "node-cron";
-
+import { CronScheduler } from "./scheduler";
 namespace EntryPoint {
     export class TaskJob extends EventEmitter {
         private static list: Promise<any>[];
@@ -20,7 +20,7 @@ namespace EntryPoint {
         }
 
         public static runTask() {
-            cron.schedule("1/* * * * *", () => {
+            cron.schedule(CronScheduler.EVERY_SECOND, () => {
                 Promise.all(this.list.map((task: Promise<any>) => task))
                     .then((result: any) => {
                         console.log(result);

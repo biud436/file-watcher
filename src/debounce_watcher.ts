@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import { EventEmitter } from "events";
 import * as cron from "node-cron";
+import { CronScheduler } from "./scheduler";
 
 namespace EntryPoint {
     interface WatcherFileLink {
@@ -70,7 +71,7 @@ namespace EntryPoint {
             });
 
             // 초 분 시 일 월 요일
-            cron.schedule("*/2 * * * * *", () => {
+            cron.schedule(CronScheduler.TWO_SECOND, () => {
                 this.removeOldWatcher();
                 this.sortDebounce();
 
