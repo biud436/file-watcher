@@ -29,7 +29,7 @@ before running the command called `yarn run start`, you should modify the config
     },
     "windows": {
         "watchDir": "./",
-        "action": []
+        "action": ["RMDIR .\\dist", "MKDIR .\\dist"]
     },
     "darwin": {
         "watchDir": "./",
