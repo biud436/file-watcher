@@ -2,6 +2,7 @@ import * as fs from "fs";
 import { EventEmitter } from "events";
 import * as cron from "node-cron";
 import { CronScheduler } from "./scheduler";
+import Time from "./timer";
 
 namespace EntryPoint {
     interface WatcherFileLink {
@@ -17,7 +18,7 @@ namespace EntryPoint {
 
         constructor() {
             super();
-            this._touch = Date.now();
+            this._touch = Time.now();
             this._file = null;
             this._isWatch = false;
             this._watcher = [];
@@ -25,7 +26,7 @@ namespace EntryPoint {
 
         public touch() {
             const touch = this._touch;
-            this._touch = Date.now() - touch;
+            this._touch = Time.now() - touch;
             return this._touch;
         }
 
@@ -48,7 +49,7 @@ namespace EntryPoint {
         }
 
         private removeOldWatcher() {
-            const now = Date.now();
+            const now = Time.now();
             const maxTime = now - 2000;
 
             this._watcher = this._watcher.filter((watcher: WatcherFileLink) => {
@@ -66,7 +67,7 @@ namespace EntryPoint {
             this._file = file;
 
             fs.watch(this._file, (eventType: any, filename: any) => {
-                const lastTouch = Date.now();
+                const lastTouch = Time.now();
                 const wathcerObject = this.addDebounce(filename, lastTouch);
             });
 
