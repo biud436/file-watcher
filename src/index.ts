@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { v4 } from "uuid";
+import * as cp from "child_process";
 import { EventEmitter } from "events";
 import DebounceWathcer from "./debounce_watcher";
 import TaskJob from "./job";
@@ -19,6 +20,10 @@ namespace EntryPoint {
          * Listen to events
          */
         listen() {
+            const config = new Config();
+            const watchFolder = config.readWatchDir();
+            const action = config.readAction();
+
             this.on("ready", () => {
                 this._watcher.on("change", (filename: string) => {
                     console.clear();
@@ -29,13 +34,32 @@ namespace EntryPoint {
                                 reject("error " + filename);
                             }
                             console.log(filename + "가 변경되었습니다");
+
                             resolve(filename);
+
+                            // 액션 실행
+                            for (let i = 0; i < action.length; i++) {
+                                try {
+                                    let triggerAction = action[i].slice(0);
+                                    if (process.platform === "win32") {
+                                        triggerAction = triggerAction.replace(
+                                            /\//g,
+                                            "\\"
+                                        );
+                                    }
+                                    const buf = cp.execSync(triggerAction, {
+                                        cwd: watchFolder,
+                                        encoding: "utf-8",
+                                    });
+                                    const stdout = buf;
+                                    console.log(stdout);
+                                } catch (e) {
+                                    console.warn(e);
+                                }
+                            }
                         })
                     );
                 });
-
-                const config = new Config();
-                const watchFolder = config.readWatchDir();
 
                 if (!fs.existsSync(watchFolder)) {
                     throw new Error(

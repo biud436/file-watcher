@@ -17,10 +17,14 @@ export class Config {
 
     constructor() {}
 
-    readWatchDir() {
+    /**
+     * 설정 파일의 경로를 반환합니다.
+     *
+     * @returns {string}
+     */
+    readConfigPath() {
         const root = process.cwd();
         let configPath = path.resolve(root, "config", "config.json");
-        console.log(configPath);
 
         if (!fs.existsSync(configPath)) {
             console.warn("config.json 파일이 존재하지 않습니다");
@@ -31,10 +35,45 @@ export class Config {
             throw new Error("WATCH_DIR 환경 변수가 존재하지 않습니다");
         }
 
-        // prettier-ignore
-        this.option = JSON.parse(
-            fs.readFileSync(configPath, "utf8")
-        );
+        return configPath;
+    }
+
+    readOption() {
+        let configPath = this.readConfigPath();
+
+        this.option = JSON.parse(fs.readFileSync(configPath, "utf8"));
+
+        return this.option;
+    }
+
+    /**
+     * 액션을 반환합니다.
+     *
+     * @returns
+     */
+    readAction() {
+        this.readOption();
+
+        let action = [];
+
+        if (process.platform === "linux") {
+            action = this.option.linux.action;
+        } else if (process.platform === "win32") {
+            action = this.option.windows.action;
+        } else {
+            throw new Error("Unsupported platform");
+        }
+
+        return action;
+    }
+
+    /**
+     * 감시할 폴더를 반환합니다.
+     *
+     * @returns
+     */
+    readWatchDir() {
+        this.readOption();
 
         let watchDir = "./";
         if (process.platform === "linux") {
