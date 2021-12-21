@@ -41,17 +41,27 @@ namespace EntryPoint {
                             for (let i = 0; i < action.length; i++) {
                                 try {
                                     let triggerAction = action[i].slice(0);
+
                                     if (process.platform === "win32") {
                                         triggerAction = triggerAction.replace(
                                             /\//g,
                                             "\\"
                                         );
                                     }
+
+                                    // 루트 권한 인가?
+                                    if (process.getuid() !== 0) {
+                                        throw new Error(
+                                            "루트 권한을 가지고 있지 않습니다."
+                                        );
+                                    }
+
                                     const buf = cp.execSync(triggerAction, {
                                         cwd: watchFolder,
                                         encoding: "utf-8",
                                     });
                                     const stdout = buf;
+
                                     console.log(stdout);
                                 } catch (e) {
                                     console.warn(e);

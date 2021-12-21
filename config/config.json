@@ -1,7 +1,9 @@
 {
     "linux": {
         "watchDir": "/home/ubuntu/HarvenHomepage/dist",
-        "action": []
+        "action": [
+            "cd /home/ubuntu/devops && sudo docker-compose up --build -d"
+        ]
     },
     "windows": {
         "watchDir": "./",
