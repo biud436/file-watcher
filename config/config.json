@@ -1,11 +1,14 @@
 {
     "linux": {
-        "watchDir": "/home/ubuntu/HarvenHomepage/dist"
+        "watchDir": "/home/ubuntu/HarvenHomepage/dist",
+        "action": []
     },
     "windows": {
-        "watchDir": "./"
+        "watchDir": "./",
+        "action": []
     },
     "darwin": {
-        "watchDir": "./"
+        "watchDir": "./",
+        "action": []
     }
 }

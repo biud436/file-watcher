@@ -9,6 +9,7 @@ interface WatchOption {
 
 interface Platform {
     watchDir: string;
+    action: string[];
 }
 
 export class Config {
