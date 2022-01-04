@@ -50,10 +50,12 @@ namespace EntryPoint {
                                     }
 
                                     // 루트 권한 인가?
-                                    if (process.getuid() !== 0) {
-                                        throw new Error(
-                                            "루트 권한을 가지고 있지 않습니다."
-                                        );
+                                    if (!!process.getuid) {
+                                        if (process.getuid() !== 0) {
+                                            throw new Error(
+                                                "루트 권한을 가지고 있지 않습니다."
+                                            );
+                                        }
                                     }
 
                                     const buf = cp.execSync(triggerAction, {

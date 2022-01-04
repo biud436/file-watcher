@@ -2,12 +2,17 @@
     "linux": {
         "watchDir": "/home/ubuntu/HarvenHomepage/dist",
         "action": [
-            "cd /home/ubuntu/devops && sudo docker-compose up --build -d"
+            "cd /home/ubuntu/devops && sudo docker-compose up --build -d homepage"
         ]
     },
     "windows": {
         "watchDir": "./",
-        "action": ["RMDIR .\\dist", "MKDIR .\\dist"]
+        "action": [
+            "RMDIR .\\dist",
+            "MKDIR .\\dist",
+
+            "echo %cd% > .\\dist\\path.txt"
+        ]
     },
     "darwin": {
         "watchDir": "./",
